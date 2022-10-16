@@ -11,6 +11,8 @@
     </class>
     <class type="costmap_2d::VoxelLayer"     base_class_type="costmap_2d::Layer">
       <description>Similar to obstacle costmap, but uses 3D voxel grid to store data.</description>
+    <class type="costmap_2d::ForbiddenLayer" base_class_type="costmap_2d::Layer">
+      <description>Forbidden zone </description>
     </class>
   </library>
 </class_libraries>
