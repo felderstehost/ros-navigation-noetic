@@ -12,6 +12,9 @@
     <class type="costmap_2d::VoxelLayer"     base_class_type="costmap_2d::Layer">
       <description>Similar to obstacle costmap, but uses 3D voxel grid to store data.</description>
     </class>
+    <class type="costmap_2d::GridLayer" base_class_type="costmap_2d::Layer">
+      <description>Demo Layer that marks all points that were ever one meter in front of the robot</description>
+    </class>
   </library>
 </class_libraries>
 
