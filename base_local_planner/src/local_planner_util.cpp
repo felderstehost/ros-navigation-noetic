@@ -104,6 +104,7 @@ bool LocalPlannerUtil::setPlan(const std::vector<geometry_msgs::PoseStamped>& or
 
 bool LocalPlannerUtil::getLocalPlan(const geometry_msgs::PoseStamped& global_pose, std::vector<geometry_msgs::PoseStamped>& transformed_plan) {
   //get the global plan in our frame
+  // ROS_WARN("==== frame: %s ", global_frame_.c_str());
   if(!base_local_planner::transformGlobalPlan(
       *tf_,
       global_plan_,

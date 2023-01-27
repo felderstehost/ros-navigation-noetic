@@ -243,6 +243,7 @@ namespace dwa_local_planner {
     for(unsigned int i = 0; i < path.getPointsSize(); ++i) {
       double p_x, p_y, p_th;
       path.getPoint(i, p_x, p_y, p_th);
+  // ROS_WARN("  %d th: (%f, %f, %f)", i, p_x,p_y, p_th);
 
       geometry_msgs::PoseStamped p;
       p.header.frame_id = costmap_ros_->getGlobalFrameID();

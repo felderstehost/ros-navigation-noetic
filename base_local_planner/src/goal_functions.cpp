@@ -110,6 +110,8 @@ namespace base_local_planner {
     const geometry_msgs::PoseStamped& plan_pose = global_plan[0];
     try {
       // get plan_to_global_transform from plan frame to global_frame
+  // ROS_WARN("==== planpose: %s ", plan_pose.header.frame_id.c_str());
+
       geometry_msgs::TransformStamped plan_to_global_transform = tf.lookupTransform(global_frame, ros::Time(),
           plan_pose.header.frame_id, plan_pose.header.stamp, plan_pose.header.frame_id, ros::Duration(0.5));
 
@@ -142,6 +144,7 @@ namespace base_local_planner {
       while(i < (unsigned int)global_plan.size() && sq_dist <= sq_dist_threshold) {
         const geometry_msgs::PoseStamped& pose = global_plan[i];
         tf2::doTransform(pose, newer_pose, plan_to_global_transform);
+  // ROS_WARN("  %d th: (%f, %f, %f)", i, newer_pose.pose.position.x, newer_pose.pose.position.y, tf2::getYaw(newer_pose.pose.orientation));
 
         transformed_plan.push_back(newer_pose);
 

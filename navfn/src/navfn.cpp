@@ -472,7 +472,7 @@ namespace navfn {
       //	 potarr[n], l, r, u, d);
       //  ROS_INFO("[Update] cost: %d\n", costarr[n]);
 
-      // 找到最小potential的单元格 ta, 和最小potential的相邻单元格 tc
+      // 找到左右最小potential的单元格 ta, 上下最小potential的相邻单元格 tc
       float ta, tc;
       if (l<r) tc=l; else tc=r;
       if (u<d) ta=u; else ta=d;
@@ -485,21 +485,23 @@ namespace navfn {
         if (dc < 0)
         {
           dc = -dc;
-          ta = tc;  // 设置ta为最小的
+          ta = tc;  // 设置ta为上下左右cell中最小的
         }
 
         // 只有当前cell的Potential计算值<原本的Potential值，才更新，这意味着从目标点开始，
         // 它的Potential值被初始化为0，不会被更新，接下来传播到它的四个邻点，才会开始更新他们的Potential值。
+        // !checks to see if the relative cost of traversing through a cell is less than the cost of going around it
         float pot;
         if (dc >= hf)		// ta 和 tc 的代价值差如果太大, use ta-only update
           pot = ta+hf;
+          
+        // cost of going around a cell is less than going through it,
         else			// two-neighbor interpolation update
         {
           // use quadratic approximation
-          // might speed this up through table lookup, but still have to
-          //   do the divide
           float d = dc/hf;
-          float v = -0.2301*d*d + 0.5307*d + 0.7040;
+          //? 这个系数怎么取的,在d=1.25时候，v取极大值1.003. 0.7 < v < 1.0
+          float v = -0.2301*d*d + 0.5307*d + 0.7040; 
           pot = ta + hf*v;
         }
 
@@ -645,19 +647,19 @@ namespace navfn {
         if (curPe == 0 && nextPe == 0) // priority blocks 为空
           break;
 
-        // stats
+        // 统计用的，不影响下面计算
         nc += curPe;
         if (curPe > nwv)
           nwv = curPe;
 
-        // reset pending flags on current priority buffer //对pending数组进行设置
+        // 对pending数组重置为false
         int *pb = curP;
         int i = curPe;
         while (i-- > 0)
           pending[*(pb++)] = false;
 
         // process current priority buffer
-        pb = curP;
+        pb = curP; // 把迭代到终点的pb重置回curP
         i = curPe;
         while (i-- > 0)
           updateCell(*pb++);
